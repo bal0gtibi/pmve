@@ -59,8 +59,8 @@ wget -q https://github.com/blakeblackshear/frigate/archive/refs/tags/${RELEASE}.
 tar -xzf frigate.tar.gz -C /opt/frigate --strip-components 1
 rm -rf frigate.tar.gz
 cd /opt/frigate
-sed -i '/tflite_runtime/d' /opt/frigate/docker/main/requirements-wheels.txt
-echo "tflite_runtime @ https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp39-cp39-linux_x86_64.whl; platform_machine == 'x86_64'" >> /opt/frigate/docker/main/requirements-wheels.txt
+#sed -i '/tflite_runtime/d' /opt/frigate/docker/main/requirements-wheels.txt
+#echo "tflite_runtime @ https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp39-cp39-linux_x86_64.whl; platform_machine == 'x86_64'" >> /opt/frigate/docker/main/requirements-wheels.txt
 $STD pip3 wheel --wheel-dir=/wheels -r /opt/frigate/docker/main/requirements-wheels.txt
 cp -a /opt/frigate/docker/main/rootfs/. /
 export TARGETARCH="amd64"
