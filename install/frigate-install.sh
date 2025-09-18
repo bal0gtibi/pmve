@@ -15,11 +15,12 @@ network_check
 update_os
 
 msg_info "Installing Dependencies (Patience)"
+$STD add-apt-repository ppa:deadsnakes/ppa -y
 $STD apt-get install -y {curl,sudo,mc,git,gpg,automake,build-essential,xz-utils,libtool,ccache,pkg-config,libgtk-3-dev,libavcodec-dev,libavformat-dev,libswscale-dev,libv4l-dev,libxvidcore-dev,libx264-dev,libjpeg-dev,libpng-dev,libtiff-dev,gfortran,openexr,libatlas-base-dev,libssl-dev,libtbbmalloc2,libtbb-dev,libdc1394-dev,libopenexr-dev,libgstreamer-plugins-base1.0-dev,libgstreamer1.0-dev,gcc,gfortran,libopenblas-dev,liblapack-dev,libusb-1.0-0-dev,jq,moreutils}
 msg_ok "Installed Dependencies"
 
 msg_info "Installing Python3 Dependencies"
-$STD apt-get install -y {python3,python3-dev,python3-setuptools,python3-pip}
+$STD apt-get install -y {python3.11,python3.11-dev,python3.11-setuptools,python3.11-pip}
 #$STD pip install --upgrade pip
 msg_ok "Installed Python3 Dependencies"
 
@@ -58,6 +59,8 @@ wget -q https://github.com/blakeblackshear/frigate/archive/refs/tags/${RELEASE}.
 tar -xzf frigate.tar.gz -C /opt/frigate --strip-components 1
 rm -rf frigate.tar.gz
 cd /opt/frigate
+sed -i '/tflite_runtime/d' /opt/frigate/docker/main/requirements-wheels.txt
+echo "tflite_runtime @ https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-cp39-cp39-linux_x86_64.whl; platform_machine == 'x86_64'" >> /opt/frigate/docker/main/requirements-wheels.txt
 $STD pip3 wheel --wheel-dir=/wheels -r /opt/frigate/docker/main/requirements-wheels.txt
 cp -a /opt/frigate/docker/main/rootfs/. /
 export TARGETARCH="amd64"
